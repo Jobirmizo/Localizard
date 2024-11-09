@@ -3,6 +3,7 @@ using Localizard.DAL;
 using Localizard.DAL.Repositories;
 using Localizard.Domain.Entites;
 using Localizard.Domain.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Localizard.Controller;
@@ -21,10 +22,11 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
     
+    
     [HttpGet]
-    public IActionResult GetAllUsers()
+    public async Task<IActionResult> GetAllUsers()
     {
-        var users = _mapper.Map<List<LoginDto>>(_userManager.GetAllUsers());
+        var users = await _userManager.GetAllUsers();
         
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
