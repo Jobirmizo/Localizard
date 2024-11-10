@@ -12,9 +12,9 @@ public class ProjectRepo : IProjectRepo
         _context = context;
     }
 
-    public async Task<IEnumerable<ProjectInfo>> GetAllProjects()
+    public  ICollection<ProjectInfo> GetAllProjects()
     {
-        return await _context.Projects.OrderBy(p => p.Id).ToListAsync();
+        return _context.Projects.OrderBy(p => p.Id).ToList();
     }
 
     public async Task<ProjectInfo> GetById(int id)
@@ -25,5 +25,19 @@ public class ProjectRepo : IProjectRepo
     public bool ProjectExists(int id)
     {
         return _context.Users.Any(p => p.Id == id);
+    }
+
+    public bool CreateProject(ProjectInfo projectInfo)
+    {
+        _context.Add(projectInfo);
+        _context.SaveChanges();
+        return Save();
+    }
+
+  
+    public bool Save()
+    {
+        var saved = _context.SaveChanges();
+        return saved > 0 ? true : false;
     }
 }

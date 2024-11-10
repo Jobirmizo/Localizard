@@ -5,7 +5,9 @@ namespace Localizard.DAL.Repositories;
 
 public interface IProjectRepo
 {
-    Task<IEnumerable<ProjectInfo>> GetAllProjects();
+    ICollection<ProjectInfo> GetAllProjects();
     Task<ProjectInfo> GetById(int id);
     bool ProjectExists(int id);
+    bool CreateProject(ProjectInfo projectInfo);
+    bool Save();
 }

@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Localizard.Controller;
 
-[Route("api/v1/[controller]/[action]")]
+[Route("api/[controller]/[action]")]
 [ApiController]
 public class UserController : ControllerBase
 {

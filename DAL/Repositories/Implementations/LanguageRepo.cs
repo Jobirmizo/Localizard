@@ -15,7 +15,7 @@ public class LanguageRepo : ILanguageRepo
         _context = context;
         _languageEnum = languageEnum;
     }
-    public async Task<IEnumerable<LanguageEnum>> GetAll()
+    public Task<IEnumerable<LanguageEnum>> GetAll()
     {
         throw new NotImplementedException();
     }
