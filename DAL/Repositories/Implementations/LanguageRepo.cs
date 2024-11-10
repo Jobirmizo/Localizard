@@ -17,7 +17,7 @@ public class LanguageRepo : ILanguageRepo
     }
     public async Task<IEnumerable<LanguageEnum>> GetAll()
     {
-        return await _languageEnum.ToString();
+        throw new NotImplementedException();
     }
 
     public Task<LanguageEnum> GetById(int id)
