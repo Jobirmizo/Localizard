@@ -30,7 +30,6 @@ public class ProjectRepo : IProjectRepo
     public bool CreateProject(ProjectInfo projectInfo)
     {
         _context.Add(projectInfo);
-        _context.SaveChanges();
         return Save();
     }
 
