@@ -1,6 +1,6 @@
 ﻿namespace Localizard.DAL.Repositories;
 
-public interface ITestRepository
+public interface IProductRepo
 {
     
 }

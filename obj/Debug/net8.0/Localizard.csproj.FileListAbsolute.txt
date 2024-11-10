@@ -121,3 +121,6 @@ C:\Users\hishi\RiderProjects\Localizard\Localizard\bin\Debug\net8.0\Microsoft.As
 C:\Users\hishi\RiderProjects\Localizard\Localizard\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\hishi\RiderProjects\Localizard\Localizard\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\hishi\RiderProjects\Localizard\Localizard\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\hishi\RiderProjects\Localizard\Localizard\bin\Debug\net8.0\Scrutor.dll
+C:\Users\hishi\RiderProjects\Localizard\Localizard\bin\Debug\net8.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\hishi\RiderProjects\Localizard\Localizard\bin\Debug\net8.0\Swashbuckle.AspNetCore.Filters.Abstractions.dll

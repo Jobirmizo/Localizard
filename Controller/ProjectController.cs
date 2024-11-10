@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Localizard.DAL;
 using Localizard.DAL.Repositories;
 using Localizard.Domain.Entites;
 using Localizard.Domain.ViewModel;
@@ -10,42 +9,41 @@ namespace Localizard.Controller;
 
 [Route("api/v1/[controller]/[action]")]
 [ApiController]
-public class UserController : ControllerBase
+public class ProjectController : ControllerBase
 {
-    
-    private readonly IUserManager _userManager;
+    private readonly IProjectRepo _projectRepo;
     private readonly IMapper _mapper;
     
-    public UserController(IUserManager userManager, IMapper mapper )
+    public ProjectController(IProjectRepo project, IMapper mapper)
     {
-        _userManager = userManager;
+        _projectRepo = project;
         _mapper = mapper;
     }
     
     
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers()
+    public async Task<IActionResult> GetAllProjects()
     {
-        var users = await _userManager.GetAllUsers();
-        var mappedUsers = _mapper.Map<List<GetUsersDto>>(users);
+        var projects = await _projectRepo.GetAllProjects();
+        var mappedProjects = _mapper.Map<List<ProjectInfoDto>>(projects);
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-
-        return Ok(mappedUsers);
+        
+        return Ok(mappedProjects);
     }
     
-    [AllowAnonymous]
+   
     [HttpGet("{id}")]
     public async Task<IActionResult> GetByIdAsync(int id)
     {
-        if (!_userManager.UserExists(id))
+        if (!_projectRepo.ProjectExists(id))
             return NotFound();
 
-        var user = await _userManager.GetByIdAsync(id);
+        var project = await _projectRepo.GetById(id);
 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        return Ok(user);
+        return Ok(project);
     }
 }

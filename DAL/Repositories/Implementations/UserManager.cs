@@ -1,4 +1,5 @@
 ﻿using Localizard.Domain.Entites;
+using Localizard.Domain.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Localizard.DAL.Repositories.Implementations;
@@ -21,18 +22,25 @@ public class UserManager : IUserManager
     {
         return await _context.Users.FirstOrDefaultAsync(i => i.Id == id);
     }
-
+    
     public bool UserExists(int id)
     {
         return _context.Users.Any(p => p.Id == id);
     }
 
-    public bool Add(User user)
+    public bool CreateUser(User user)
     {
-        _context.Add(user);
+        var userDto = new User()
+        {
+            Username = user.Username,
+            PasswordHash = user.PasswordHash
+        };
+
+        _context.Users.Add(userDto);
+        _context.SaveChanges();
+        
         return Save();
     }
-
     public bool Update(User user)
     {
         _context.Update(user);
