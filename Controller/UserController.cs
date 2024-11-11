@@ -24,9 +24,9 @@ public class UserController : ControllerBase
     
     
     [HttpGet]
-    public async Task<IActionResult> GetAllUsers()
+    public IActionResult GetAllUsers()
     {
-        var users = await _userManager.GetAllUsers();
+        var users = _userManager.GetAllUsers();
         var mappedUsers = _mapper.Map<List<GetUsersDto>>(users);
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -47,5 +47,37 @@ public class UserController : ControllerBase
             return BadRequest(ModelState);
 
         return Ok(user);
+    }
+    
+    [HttpPost]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    public IActionResult CreateUser([FromBody] UserDto userCreate)
+    {
+        if (userCreate == null)
+            return BadRequest(ModelState);
+
+        var user = _userManager.GetAllUsers()
+            .Where(p => p.Username.Trim().ToUpper() == userCreate.Username.TrimEnd().ToUpper())
+            .FirstOrDefault();
+
+        if (user != null)
+        {
+            ModelState.AddModelError("", "Project already exist!");
+            return StatusCode(422, ModelState);
+        }
+
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userMap = _mapper.Map<User>(userCreate);
+
+        if (!_userManager.CreateUser(userMap))
+        {
+            ModelState.AddModelError("", "Something went wrong! while saving");
+            return StatusCode(500, ModelState);
+        }
+
+        return Ok("Successfully created");
     }
 }

@@ -35,9 +35,9 @@ public class AuthController : ControllerBase
     [HttpPost]
     public ActionResult<User> Login(LoginDto request)
     {
-        if (user.Username != request.Useranme)
+        if (user.Username != request.Username)
             return BadRequest("User not found!");
-
+        
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             return BadRequest("Wrong password!");
 
@@ -47,12 +47,13 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    public  ActionResult<User> Register(LoginDto request)
+    public  ActionResult<User> Register(RegisterDto request)
     {
         string passwordHash
             = BCrypt.Net.BCrypt.HashPassword(request.Password);
         user.Username = request.Useranme;
         user.PasswordHash = passwordHash;
+        user.Role = request.Role;
 
         return Ok(user);
     }
@@ -61,7 +62,7 @@ public class AuthController : ControllerBase
     {
         List<Claim> claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Username)
+            new Claim(ClaimTypes.Name, user.Username, user.Role)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

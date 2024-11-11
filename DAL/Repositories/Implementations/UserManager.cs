@@ -13,9 +13,9 @@ public class UserManager : IUserManager
         _context = context;
     }
 
-    public async Task<IEnumerable<User>> GetAllUsers()
+    public ICollection<User> GetAllUsers()
     {
-        return await _context.Users.OrderBy(p => p.Id).ToListAsync();
+        return _context.Users.OrderBy(p => p.Id).ToList();
     }
 
     public async Task<User> GetByIdAsync(int id)
@@ -30,15 +30,7 @@ public class UserManager : IUserManager
 
     public bool CreateUser(User user)
     {
-        var userDto = new User()
-        {
-            Username = user.Username,
-            PasswordHash = user.PasswordHash
-        };
-
-        _context.Users.Add(userDto);
-        _context.SaveChanges();
-        
+        _context.Add(user);
         return Save();
     }
     public bool Update(User user)

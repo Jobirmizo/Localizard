@@ -16,5 +16,7 @@ public class AppDbContext : IdentityDbContext
     public DbSet<ProjectInfo> Projects { get; set; }
     public DbSet<ProjectDetail> ProjectDetails { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Language> Languages { get; set; }
+
     
 }

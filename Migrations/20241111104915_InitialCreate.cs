@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Localizard.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityUser : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,38 @@ namespace Localizard.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProjectDetails",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Key = table.Column<int>(type: "integer", nullable: false),
+                    Translation = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Tag = table.Column<string>(type: "text", nullable: false),
+                    PlatformCategories = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Username = table.Column<string>(type: "text", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -157,6 +189,57 @@ namespace Localizard.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Languages",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    LanguageCode = table.Column<string>(type: "text", nullable: false),
+                    ProjectInfoId = table.Column<int>(type: "integer", nullable: true),
+                    ProjectInfoId1 = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Languages", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ProjectDetailId = table.Column<int>(type: "integer", nullable: true),
+                    DefaultLanguageId1 = table.Column<int>(type: "integer", nullable: false),
+                    AvailableLanguageId1 = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Projects_Languages_AvailableLanguageId1",
+                        column: x => x.AvailableLanguageId1,
+                        principalTable: "Languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Projects_Languages_DefaultLanguageId1",
+                        column: x => x.DefaultLanguageId1,
+                        principalTable: "Languages",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Projects_ProjectDetails_ProjectDetailId",
+                        column: x => x.ProjectDetailId,
+                        principalTable: "ProjectDetails",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -193,11 +276,59 @@ namespace Localizard.Migrations
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Languages_ProjectInfoId",
+                table: "Languages",
+                column: "ProjectInfoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Languages_ProjectInfoId1",
+                table: "Languages",
+                column: "ProjectInfoId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_AvailableLanguageId1",
+                table: "Projects",
+                column: "AvailableLanguageId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_DefaultLanguageId1",
+                table: "Projects",
+                column: "DefaultLanguageId1");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_ProjectDetailId",
+                table: "Projects",
+                column: "ProjectDetailId",
+                unique: true);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Languages_Projects_ProjectInfoId",
+                table: "Languages",
+                column: "ProjectInfoId",
+                principalTable: "Projects",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Languages_Projects_ProjectInfoId1",
+                table: "Languages",
+                column: "ProjectInfoId1",
+                principalTable: "Projects",
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Languages_Projects_ProjectInfoId",
+                table: "Languages");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Languages_Projects_ProjectInfoId1",
+                table: "Languages");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -214,10 +345,22 @@ namespace Localizard.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Languages");
+
+            migrationBuilder.DropTable(
+                name: "ProjectDetails");
         }
     }
 }

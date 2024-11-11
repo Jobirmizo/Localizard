@@ -1,4 +1,5 @@
 ﻿using Localizard.Domain.Entites;
+using Localizard.Domain.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Localizard.DAL.Repositories.Implementations;
@@ -27,7 +28,7 @@ public class ProjectRepo : IProjectRepo
         return _context.Users.Any(p => p.Id == id);
     }
 
-    public bool CreateProject(ProjectInfo projectInfo)
+    public bool CreateProject(List<ProjectInfoDto> projectInfo)
     {
         _context.Add(projectInfo);
         return Save();

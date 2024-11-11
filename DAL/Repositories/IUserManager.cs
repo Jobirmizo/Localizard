@@ -5,7 +5,7 @@ namespace Localizard.DAL.Repositories;
 
 public interface IUserManager
 {
-    Task<IEnumerable<User>> GetAllUsers();
+    ICollection<User> GetAllUsers();
     Task<User> GetByIdAsync(int id);
     bool UserExists(int id);
     bool CreateUser(User user);

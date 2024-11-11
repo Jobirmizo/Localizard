@@ -1,4 +1,5 @@
 ﻿using AutoMapper.Configuration.Annotations;
+using Localizard.Domain.Entites;
 using Localizard.Domain.Enums;
 
 namespace Localizard.Domain.ViewModel;
@@ -6,12 +7,9 @@ namespace Localizard.Domain.ViewModel;
 public class ProjectInfoDto
 {
     public string Name { get; set; }
-    [Ignore]
-    public LanguageEnum? DefaultLanguage { get; set; }
-    [Ignore]
-    public List<LanguageEnum>? AvailableLanguage { get; set; }
-    [Ignore]
+    public List<LanguageDto> DefaultLanguageId { get; set; }
+    public List<LanguageDto> AvailableLanguageId { get; set; }
     public DateTime? CreatedAt { get; set; }
-    [Ignore]
     public DateTime? UpdatedAt { get; set; }
+    
 }

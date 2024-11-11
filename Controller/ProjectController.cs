@@ -70,7 +70,7 @@ public class ProjectController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var projectMap = _mapper.Map<ProjectInfo>(projectCreate);
+        var projectMap = _mapper.Map<List<ProjectInfoDto>>(projectCreate);
 
         if (!_projectRepo.CreateProject(projectMap))
         {
